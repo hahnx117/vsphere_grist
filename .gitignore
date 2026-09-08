@@ -1,0 +1,11 @@
+# Creds file
+.env
+
+# venv files
+bin/
+include/
+lib/
+lib64
+etc/
+share/
+pyvenv.cfg
