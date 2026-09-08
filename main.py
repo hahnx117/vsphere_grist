@@ -85,7 +85,7 @@ def get_custom_attributes(host, username, password, vm_id):
     field_names = {f.key: f.name for f in content.customFieldsManager.field}
 
     # Find the VM
-    searcher = content.searchIndex
+    #searcher = content.searchIndex
     vm = content.searchIndex.FindByUuid(None, vm_id, True)
 
     # If FindByUuid doesn't work, search by inventory path or iterate
@@ -94,7 +94,7 @@ def get_custom_attributes(host, username, password, vm_id):
             content.rootFolder, [vim.VirtualMachine], True
         )
         for v in container.view:
-            if v._moId == vm_id:
+            if v._moId == vm_id:  # pylint: disable=protected-access
                 vm = v
                 break
         container.Destroy()
@@ -127,7 +127,10 @@ def main():
     print("\n\n and the Version,")
     print(client.get("/api/appliance/system/version").json())
     print("\n\n Custom atts?")
-    attys = get_custom_attributes("vc-oit02.oit.umn.edu", os.environ["VSPHERE_USER"], os.environ["VSPHERE_PASS"], 'vm-932832')
+    attys = get_custom_attributes("vc-oit02.oit.umn.edu",
+                                  os.environ["VSPHERE_USER"],
+                                  os.environ["VSPHERE_PASS"],
+                                  'vm-932832')
     pprint.pprint(attys)
 
 if __name__ == "__main__":
