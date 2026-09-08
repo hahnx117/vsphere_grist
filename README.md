@@ -121,4 +121,13 @@ Specifically the nic info,
           'upt_compatibility_enabled': True,
           'upt_v2_compatibility_enabled': False,
           'wake_on_lan_enabled': True}}
+
+
+ and the tags for that machine?
+[{'category': 'Data Security', 'tag': 'Medium Security'},
+ {'category': 'Department', 'tag': 'CLA'},
+ {'category': 'Location', 'tag': 'WBOB'},
+ {'category': 'Data Classification', 'tag': 'Private Restricted'},
+ {'category': 'Service Offering', 'tag': 'Self Managed'},
+ {'category': 'Environment', 'tag': 'Production'}]
 ```

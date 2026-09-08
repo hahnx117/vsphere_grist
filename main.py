@@ -55,6 +55,25 @@ def build_vm_dict(vsphereclient, vm_list):
 
     return vm_dict
 
+def get_vm_tags(vsphereclient, vm_id):
+    """Get tags attached to a VM."""
+    response = vsphereclient.post(
+        "/api/cis/tagging/tag-association?action=list-attached-tags",
+        json={"object_id": {"id": vm_id, "type": "VirtualMachine"}}
+    )
+    response.raise_for_status()
+    tag_ids = response.json()
+
+    tags = []
+    for tag_id in tag_ids:
+        tag = vsphereclient.get(f"/api/cis/tagging/tag/{tag_id}").json()
+        category = vsphereclient.get(f"/api/cis/tagging/category/{tag['category_id']}").json()
+        tags.append({
+            "category": category["name"],
+            "tag": tag["name"]
+        })
+    return tags
+
 def main():
     """Run the vSphere calls."""
     client = VSphereClient(
@@ -68,7 +87,8 @@ def main():
     pprint.pprint(vm_dict['vm-932832'])
     print("\n\nSpecifically the nic info,")
     pprint.pprint(vm_dict['vm-932832']['nics'])
-
+    print("\n\n and the tags for that machine?")
+    pprint.pprint(get_vm_tags(client, 'vm-932832'))
 
 if __name__ == "__main__":
     main()
