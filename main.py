@@ -5,6 +5,8 @@ import pprint
 import os
 import requests
 from dotenv import load_dotenv
+from pyVim.connect import SmartConnect, Disconnect
+from pyVmomi import vim
 
 load_dotenv()
 
@@ -74,6 +76,39 @@ def get_vm_tags(vsphereclient, vm_id):
         })
     return tags
 
+def get_custom_attributes(host, username, password, vm_id):
+    """Get custom attributes for a VM via SOAP API."""
+    si = SmartConnect(host=host, user=username, pwd=password)
+    content = si.RetrieveContent()
+
+    # Build a lookup of custom field key -> name
+    field_names = {f.key: f.name for f in content.customFieldsManager.field}
+
+    # Find the VM
+    searcher = content.searchIndex
+    vm = content.searchIndex.FindByUuid(None, vm_id, True)
+
+    # If FindByUuid doesn't work, search by inventory path or iterate
+    if vm is None:
+        container = content.viewManager.CreateContainerView(
+            content.rootFolder, [vim.VirtualMachine], True
+        )
+        for v in container.view:
+            if v._moId == vm_id:
+                vm = v
+                break
+        container.Destroy()
+
+    if vm is None:
+        raise ValueError(f"VM {vm_id} not found")
+
+    attrs = {}
+    for value in vm.customValue:
+        attrs[field_names[value.key]] = value.value
+
+    Disconnect(si)
+    return attrs
+
 def main():
     """Run the vSphere calls."""
     client = VSphereClient(
@@ -89,6 +124,11 @@ def main():
     pprint.pprint(vm_dict['vm-932832']['nics'])
     print("\n\n and the tags for that machine?")
     pprint.pprint(get_vm_tags(client, 'vm-932832'))
+    print("\n\n and the Version,")
+    print(client.get("/api/appliance/system/version").json())
+    print("\n\n Custom atts?")
+    attys = get_custom_attributes("vc-oit02.oit.umn.edu", os.environ["VSPHERE_USER"], os.environ["VSPHERE_PASS"], 'vm-932832')
+    pprint.pprint(attys)
 
 if __name__ == "__main__":
     main()

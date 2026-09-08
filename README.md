@@ -130,4 +130,18 @@ Specifically the nic info,
  {'category': 'Data Classification', 'tag': 'Private Restricted'},
  {'category': 'Service Offering', 'tag': 'Self Managed'},
  {'category': 'Environment', 'tag': 'Production'}]
+
+
+ and the Version,
+{'summary': 'Patch for VMware vCenter Server 8.0', 'install_time': '2026-07-29T17:12:33.678Z', 'product': 'VMware vCenter Server', 'build': '25600417', 'releasedate': 'July 27, 2026', 'type': 'vCenter Server with an embedded Platform Services Controller', 'version': '8.0.3.01000'}
+
+
+ Custom atts?
+{'Backup Status': 'Backup Job ID [10808470]  Client: [virt-vc-oit02], Backup '
+                  'Set: [SME], Subclient: [NewSME] Parent Backup Job ID '
+                  '[10807611]',
+ 'Creation Date': '08/02/2019 14:51:49',
+ 'Functional Description': "Web host for Paul Schrater's lab",
+ 'Last Backup': '09/07/2026 18:26:35',
+ 'Requested By': 'dolsen'}
 ```
