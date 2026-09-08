@@ -1,5 +1,11 @@
 # vSphere Grist Tool
 
+To use this you'll need to create a .env file with the following,
+```
+VSPHERE_USER=<username>
+VSPHERE_PASS=<password>
+```
+
 ## Usage in a Python `venv`
 Pull down the repo,
 
