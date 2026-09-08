@@ -66,6 +66,7 @@ def main():
     vm_dict = build_vm_dict(client, vms)
 
     pprint.pprint(vm_dict['vm-932832'])
+    print("\n\nSpecifically the nic info,")
     pprint.pprint(vm_dict['vm-932832']['nics'])
 
 
